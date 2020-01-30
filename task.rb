@@ -23,7 +23,7 @@ def q3
   numbers = [1, 5, 8, 10, 2, 3, 2, 3, 3, 1, 4, 5, 9]
 
   # 以下に回答を記載
-  p numbers.select { |item| item == 3}.size
+  p numbers.count { |item| item == 3}
 
 end
 
@@ -31,7 +31,7 @@ def q4
   sports = ["サッカー", "フットサル", nil, "野球", "バスケ", nil, "バレー"]
 
   # 以下に回答を記載
-  p sports.reject { |item| item == nil}
+  p sports.compact 
 
 end
 
@@ -40,8 +40,8 @@ def q5
   array2 = [1, 5, 8, 10]
 
   # 以下に回答を記載
-  puts array1.empty?
-  puts array2.empty?
+  p array1.empty?
+  p array2.empty?
 
 end
 
@@ -49,7 +49,7 @@ def q6
   numbers1 = [1, 2, 3, 4, 5]
 
   # 以下に回答を記載
-  numbers2 = numbers1.map do |i| i * 10 end
+  numbers2 = numbers1.map { |i| i * 10 }
   p numbers2
 
 end
@@ -66,7 +66,7 @@ def q8
   programming_languages = %w(ruby php python javascript)
 
   # 以下に回答を記載
-  programming_languages = programming_languages.map(&:capitalize)
+  programming_languages.map(&:capitalize!)
   upper_case_programming_languages = programming_languages.map(&:upcase)
 
   
@@ -78,7 +78,9 @@ def q9
   names = ["田中", "佐藤", "佐々木", "高橋"]
 
   # 以下に回答を記載
-  result = names.map.with_index do |name, index| "会員No."+(index + 1).to_s + " " + name + "さん" end
+  result = names.map.with_index do 
+    |name, index| "会員No.#{index + 1} #{name}さん" 
+  end
   puts result
 
 end
@@ -87,7 +89,9 @@ def q10
   foods = %w(いか たこ うに しゃけ うにぎり うに軍艦 うに丼)
 
   # 以下に回答を記載
-  result = foods.map do |food| food.include?("うに") ? "#{food}は好物です":"#{food}はまぁまぁ好きです" end
+  result = foods.map do 
+    |food| food.include?("うに") ? "#{food}は好物です":"#{food}はまぁまぁ好きです" 
+  end
   p result
 
 
@@ -97,13 +101,17 @@ def q11
   sports = ["サッカー", "バスケ", "野球", ["フットサル", "野球"], "水泳", "ハンドボール", ["卓球", "サッカー", "ボルダリング"]]
 
   # 以下に回答を記載
-
+  sports.flatten!.uniq!.map!.with_index do 
+    |name, index| "No.#{index + 1} #{name}" 
+  end
+  puts sports
 end
 
 def q12
   data = { user: { name: "satou", age: 33 } }
 
   # 以下に回答を記載
+  p data.dig(:user,:name)
 
 end
 
@@ -112,6 +120,7 @@ def q13
   update_data = { age: 32, address: "沖縄" }
 
   # 以下に回答を記載
+  p user_data.merge(update_data)
 
 end
 
@@ -119,6 +128,7 @@ def q14
   data = { name: "satou", age: 33, address: "saitama", hobby: "soccer", email: "hoge@fuga.com" }
 
   # 以下に回答を記載
+  p data.keys
 
 end
 
@@ -127,6 +137,8 @@ def q15
   data2 = { name: "yamada", hobby: "baseball", role: "normal" }
 
   # 以下に回答を記載
+  p data1.has_key?(:age) ? "OK": "NG"
+  p data2.has_key?(:age) ? "OK": "NG"
 
 end
 
@@ -139,11 +151,30 @@ def q16
   ]
 
   # 以下に回答を記載
+  users.each { |user|
+    p "私の名前は#{user[:name]}です。年齢は#{user[:age]}です。"
+  }
 
 end
 
 class UserQ17
   # 以下に回答を記載
+  attr_accessor :name, :age, :gender, :admin
+  def initialize(**args)
+    @name = args[:name]
+    @age = args[:age]
+    @gender = args[:gender]
+    @admin = args[:admin] ? "有り":"無し"
+  end
+  def info
+    str = <<-EOS
+      "名前:#{@name}"
+      "年齢:#{@age}"
+      "性別:#{@gender}"
+      "管理者権限: #{@admin}"
+    EOS
+    puts str
+  end
 
 end
 
@@ -158,8 +189,22 @@ def q17
 end
 
 class UserQ18
+  attr_accessor :name, :age
   # 以下に回答を記載
+  def initialize(**args)
+    @name = args[:name]
+    @age = args[:age]
+  end
 
+  def introduce
+    if @age > 30
+      "こんにちは、#{name}と申します。宜しくお願いいたします。"
+    elsif @age > 5
+      "はいさいまいどー、#{name}です!!!"
+    else 
+      "その他"
+    end
+  end
 end
 
 def q18
@@ -173,9 +218,10 @@ end
 
 class Item
   # 以下を修正して下さい
-
-  def initialize(name)
-    @name = name
+  attr_accessor :name
+  # 以下に回答を記載
+  def initialize(**args)
+    @name = args[:name]
   end
 end
 
@@ -187,11 +233,35 @@ end
 
 class UserQ20
   # 以下に回答を記載
+  attr_accessor :name, :age
 
+  def initialize(**args)
+    @name = args[:name]
+    @age = args[:age]
+  end
 end
 
 class Zoo
   # 以下に回答を記載
+  attr_accessor :name, :entry_fee
+
+  def initialize(**args)
+    @name = args[:name]
+    @entry_fee = args[:entry_fee]
+  end
+
+  def info_entry_fee(user)
+    if user.age > 64 && user.age < 120
+      puts "#{user.name}さんの入場料金は#{entry_fee[:senior]}円です。"
+    elsif user.age > 12
+      puts "#{user.name}さんの入場料金は#{entry_fee[:adult]}円です。"
+    elsif user.age > 5
+      puts "#{user.name}さんの入場料金は#{entry_fee[:children]}円です。"
+    elsif user.age > -1
+      puts "#{user.name}さんの入場料金は#{entry_fee[:infant]}円です。"
+    else
+    end
+  end
 
 end
 
