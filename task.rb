@@ -23,7 +23,7 @@ def q3
   numbers = [1, 5, 8, 10, 2, 3, 2, 3, 3, 1, 4, 5, 9]
 
   # 以下に回答を記載
-  p numbers.count { |item| item == 3}
+  p numbers.count(3)
 
 end
 
@@ -31,7 +31,8 @@ def q4
   sports = ["サッカー", "フットサル", nil, "野球", "バスケ", nil, "バレー"]
 
   # 以下に回答を記載
-  p sports.compact 
+  sports.compact! 
+  p sports
 
 end
 
@@ -58,7 +59,8 @@ def q7
   array = ["1", "2", "3", "4", "5"]
 
   # 以下に回答を記載
-  p array.map(&:to_i)
+  array.map!(&:to_i)
+  p array
 
 end
 
@@ -78,10 +80,9 @@ def q9
   names = ["田中", "佐藤", "佐々木", "高橋"]
 
   # 以下に回答を記載
-  result = names.map.with_index do 
-    |name, index| "会員No.#{index + 1} #{name}さん" 
+  names.each.with_index(1) do 
+    |name, index| puts "会員No.#{index} #{name}さん" 
   end
-  puts result
 
 end
 
@@ -101,10 +102,9 @@ def q11
   sports = ["サッカー", "バスケ", "野球", ["フットサル", "野球"], "水泳", "ハンドボール", ["卓球", "サッカー", "ボルダリング"]]
 
   # 以下に回答を記載
-  sports.flatten!.uniq!.map!.with_index do 
-    |name, index| "No.#{index + 1} #{name}" 
+  sports.flatten.uniq.each.with_index(1) do 
+    |name, index| puts "No.#{index} #{name}" 
   end
-  puts sports
 end
 
 def q12
@@ -198,9 +198,9 @@ class UserQ18
 
   def introduce
     if @age > 30
-      "こんにちは、#{name}と申します。宜しくお願いいたします。"
+      "こんにちは、#{@name}と申します。宜しくお願いいたします。"
     elsif @age > 5
-      "はいさいまいどー、#{name}です!!!"
+      "はいさいまいどー、#{@name}です!!!"
     else 
       "その他"
     end
@@ -220,8 +220,8 @@ class Item
   # 以下を修正して下さい
   attr_accessor :name
   # 以下に回答を記載
-  def initialize(**args)
-    @name = args[:name]
+  def initialize(name:)
+    @name = name
   end
 end
 
@@ -243,22 +243,27 @@ end
 
 class Zoo
   # 以下に回答を記載
-  attr_accessor :name, :entry_fee
+  attr_accessor :name, :senior,:adult,:children,:infant
 
   def initialize(**args)
     @name = args[:name]
-    @entry_fee = args[:entry_fee]
+    entry_fee = args[:entry_fee]
+    @senior = entry_fee[:senior]
+    @adult = entry_fee[:adult]
+    @children = entry_fee[:children]
+    @infant = entry_fee[:infant]
   end
 
   def info_entry_fee(user)
-    if user.age > 64 && user.age < 120
-      puts "#{user.name}さんの入場料金は#{entry_fee[:senior]}円です。"
-    elsif user.age > 12
-      puts "#{user.name}さんの入場料金は#{entry_fee[:adult]}円です。"
-    elsif user.age > 5
-      puts "#{user.name}さんの入場料金は#{entry_fee[:children]}円です。"
-    elsif user.age > -1
-      puts "#{user.name}さんの入場料金は#{entry_fee[:infant]}円です。"
+    case user.age
+    when 65..120
+      puts "#{user.name}さんの入場料金は#{@senior}円です。"
+    when 13..64
+      puts "#{user.name}さんの入場料金は#{@adult}円です。"
+    when 6..12
+      puts "#{user.name}さんの入場料金は#{@children}円です。"
+    when 0..5
+      puts "#{user.name}さんの入場料金は#{@infant}円です。"
     else
     end
   end
