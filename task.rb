@@ -80,8 +80,8 @@ def q9
   names = ["田中", "佐藤", "佐々木", "高橋"]
 
   # 以下に回答を記載
-  names.each.with_index(1) do 
-    |name, index| puts "会員No.#{index} #{name}さん" 
+  names.each.with_index(1) do |name, index| 
+    puts "会員No.#{index} #{name}さん" 
   end
 
 end
@@ -102,8 +102,8 @@ def q11
   sports = ["サッカー", "バスケ", "野球", ["フットサル", "野球"], "水泳", "ハンドボール", ["卓球", "サッカー", "ボルダリング"]]
 
   # 以下に回答を記載
-  sports.flatten.uniq.each.with_index(1) do 
-    |name, index| puts "No.#{index} #{name}" 
+  sports.flatten.uniq.each.with_index(1) do |name, index| 
+    puts "No.#{index} #{name}" 
   end
 end
 
@@ -255,17 +255,18 @@ class Zoo
   end
 
   def info_entry_fee(user)
-    case user.age
+    fee = case user.age
     when 65..120
-      puts "#{user.name}さんの入場料金は#{@senior}円です。"
+      @senior
     when 13..64
-      puts "#{user.name}さんの入場料金は#{@adult}円です。"
+      @adult
     when 6..12
-      puts "#{user.name}さんの入場料金は#{@children}円です。"
+      @children
     when 0..5
-      puts "#{user.name}さんの入場料金は#{@infant}円です。"
+      @infant
     else
     end
+    puts puts "#{user.name}さんの入場料金は#{fee}円です。"
   end
 
 end
